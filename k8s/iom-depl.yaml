@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project_iom-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: project_iom
+  template:
+    metadata:
+      labels:
+        app: project_iom
+    spec:
+      containers:
+        - name: project_iom
+          image: soumyadeepdutta/project_iom
+          # env:
+          #   - name: JWT_KEY
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: jwt-secret
+          #         key: JWT_KEY
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: project_iom-srv
+spec:
+  selector:
+    app: project_iom
+  ports:
+    - name: project_iom
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: LoadBalancer
